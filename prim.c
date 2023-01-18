@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include<limits.h>
+
+//finding minimum vertex to be explored next
+int minv(int n,int dist[],int mst[]){  
+    int min=INT_MAX;
+    int vertex;
+    for(int i=0;i<n;i++){
+        if(mst[i]==0 && dist[i]<min){
+            vertex=i;
+            min=dist[i];
+        }
+    }
+    return vertex;
+}
+
+ void findmst(int n,int arr[n][n]){
+ int parent[n];
+ int dist[n],mst[n];
+ for(int i=0;i<n;i++){
+     dist[i]=INT_MAX;
+     mst[i]=0;
+ }
+ parent[0]=-1;
+ dist[0]=0;
+ 
+ //creating mst
+ for(int i=0;i<n-1;++i){
+		int U = minv(n,dist,mst);
+		printf("\nThe min vertex now is %d\n",U);
+		mst[U] = 1;
+		for(int j=0;j<n;++j){
+			if(arr[U][j]!=0 && mst[j]==0 && arr[U][j]<dist[j])
+			{
+				dist[j] = arr[U][j];
+				parent[j] = U;
+			}
+		}
+	}
+for(int i=0;i<n;i++){
+    printf("%d --> %d : %d",parent[i],i,dist[i]);
+    printf("\n");
+}
+ }
+ int main(){
+  //getting graph as input
+  int n;
+  printf("enter no of vertices: ");
+  scanf("%d",&n);
+ 
+  int arr[n][n];
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      arr[i][j]=0;
+    }
+  }
+  int edges;
+  printf("enter no of edges: ");
+  scanf("%d",&edges);
+  while(edges--){
+    int v1,v2,c;
+    printf("enter two nodes to establish edge: ");
+    scanf("%d %d",&v1,&v2);
+    printf("Enter cost : ");
+    scanf("%d",&c);
+    arr[v1][v2]=c;
+    arr[v2][v1]=c;
+  }
+  findmst(n,arr);
+  return 0;
+ }
